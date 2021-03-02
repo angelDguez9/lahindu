@@ -4,11 +4,11 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class UserRequest {
-    @SerializedName("email")
+    @SerializedName("id")
     @Expose
     var email:String? = null
 
-    @SerializedName("password")
+    @SerializedName("city")
     @Expose
     var password:String? = null
 }

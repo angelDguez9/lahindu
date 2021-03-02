@@ -10,11 +10,11 @@ class UserResponse {
     var data:User? = null
 
     class User{
-        @SerializedName("email")
+        @SerializedName("id")
         @Expose
         var email:String? = null
 
-        @SerializedName("password")
+        @SerializedName("city")
         @Expose
         var password:String? = null
     }
