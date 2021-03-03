@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 val user = response.body()
-                Log.e("Email", user!!.data?.email)
-                Log.e("Password", user!!.data?.password)
+                Log.e("Email", user!!.email)
+                Log.e("Password", user!!.password)
             }
 
         })

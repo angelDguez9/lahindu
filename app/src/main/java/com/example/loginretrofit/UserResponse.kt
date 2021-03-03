@@ -5,17 +5,12 @@ import com.google.gson.annotations.SerializedName
 
 class UserResponse {
 
-    @SerializedName("data")
-    @Expose
-    var data:User? = null
-
-    class User{
-        @SerializedName("id")
+        @SerializedName("email")
         @Expose
         var email:String? = null
 
-        @SerializedName("city")
+        @SerializedName("password")
         @Expose
         var password:String? = null
-    }
+
 }

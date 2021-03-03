@@ -7,8 +7,10 @@ import retrofit2.http.POST
 
 interface UserApi {
 
-    @POST("login")
+    @POST("user")
     fun login(
         @Body userRequest: UserRequest
     ): Call<UserResponse>
+
+
 }

@@ -12,7 +12,7 @@ class Retro {
             .setLenient()
             .create()
         return Retrofit.Builder()
-            .baseUrl("http://127.0.0.1:9000/")
+            .baseUrl("http://192.168.1.74:9000/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
