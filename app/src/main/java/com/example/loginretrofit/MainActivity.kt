@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.ResponseBody
+import okhttp3.internal.concurrent.Task
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,31 +36,62 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getOneUser() {
+    private  fun getOneUser() {
         Toast.makeText(this@MainActivity, "Entro al meto oneuser", Toast.LENGTH_LONG).show()
+      //se crea la variable que guardara el valor del editext convertido a string
         val sendemail = ed_email.text.toString().trim()
+        // se hace la llamada a la url base desde la clase Retro, ademas se instacia la interface USerAPi
         val request = Retro().getRetroClientInstance().create(UserApi::class.java)
-        request.getOneEmail(sendemail).enqueue(object : Callback<datausers>{
-            override fun onFailure(call: Call<datausers>, t: Throwable) {
+        // se crea una nueva variable que recibira como valor a request y quien llamara al metodo getoneemail de la clase
+        // useraPi
+        val call = request.getOneEmail(sendemail)
+        Log.e("interrogation","information " + call)
+        // se crea la consulta si es fallida por al gun problema con el servidor o con
+        // algun problema con la conversion de los datos entrara al metodo onfailure
+        call.enqueue(object : Callback<ResponseBody>{
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+               Log.e("Error","Usuario no registrado")
+                Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_LONG).show()
+            }
+// si la conexion es exitosa y la consulta requerida esta correcta se entra en el metodo onResponse
+            // el cual permitira continuar con la accion que se desea ralizar.
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                //Toast.makeText(this@MainActivity, "succesfull", Toast.LENGTH_LONG).show()
+    // la condicion if, se esta utilizando para corroborar que la consulta que se realizo
+    // sea completamente correcta si se llegara acambiar el codigo 200 por algun otro es posible que la consulta
+    // no sea completamente correcta.
+                if(response.code()==200){
+
+                    Toast.makeText(this@MainActivity, "Entro al repsonsecode", Toast.LENGTH_LONG).show()
+                }else{
+                    Toast.makeText(this@MainActivity, "Entro  al else", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+
+        /*request.getOneEmail(sendemail).enqueue(object : Callback<UserRequest>{
+            override fun onFailure(call: Call<UserRequest>, t: Throwable) {
                 Toast.makeText(this@MainActivity, "Error en al pedir dato", Toast.LENGTH_LONG).show()
+                Log.e("Failed","information "+request.getOneEmail(sendemail))
 
             }
 
-            override fun onResponse(call: Call<datausers>, response: Response<datausers>) {
-                if(response.code()== 200) {
+            override fun onResponse(call: Call<UserRequest>, response: Response<UserRequest>) {
+                Log.e("successfull","information ")
+                if(response.code()== 201) {
                     Toast.makeText(this@MainActivity, "Exito", Toast.LENGTH_LONG).show()
                     val datausers = response.body()!!
 
                     val stringBuilder = "email:" + datausers.email
 
-                    Log.e("successfull","information "+stringBuilder)
+                  //  Log.e("successfull","information "+stringBuilder)
                     if(datausers.email.equals(ed_email.text.toString().trim()) ){
                         Toast.makeText(this@MainActivity, "Exito", Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
-        })
+        })*/
 
     }
 
