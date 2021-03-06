@@ -2,17 +2,12 @@ package com.example.loginretrofit
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Optional.empty
 
 class MainActivity : AppCompatActivity() {
     //var btn = findViewById<Button>(R.id.btn_login)
@@ -33,32 +28,38 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "No puede haber campos vacios ", Toast.LENGTH_SHORT).show();
             } else {
                 getOneUser()
-                //getusers()
+               // getusers()
                 //login()
             }
         }
     }
 
     private fun getOneUser() {
+        Toast.makeText(this@MainActivity, "Entro al meto oneuser", Toast.LENGTH_LONG).show()
+        val sendemail = ed_email.text.toString().trim()
+        val request = Retro().getRetroClientInstance().create(UserApi::class.java)
+        request.getOneEmail(sendemail).enqueue(object : Callback<datausers>{
+            override fun onFailure(call: Call<datausers>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error en al pedir dato", Toast.LENGTH_LONG).show()
 
-        Toast.makeText(this@MainActivity,"Entro al metodo get",Toast.LENGTH_LONG).show()
-        val getUsers: UserApi = Retro().getRetroClientInstance().create(UserApi::class.java)
-        val result: Call<List<datausers>> = getUsers.Allusers()
-        Toast.makeText(this@MainActivity,"Result "+result,Toast.LENGTH_LONG).show()
-        result.enqueue(object : Callback<List<datausers>> {
-            override fun onFailure(Call: Call<List<datausers>>, t: Throwable){
-                Toast.makeText(this@MainActivity,"Error",Toast.LENGTH_LONG).show()
             }
-            override fun onResponse(
-                call: Call<List<datausers>>,
-                response: Response<List<datausers>>
-            ) {
-                val user = response.body()
-                Log.e("Error","information")
-                Toast.makeText(this@MainActivity,"Metodoget",Toast.LENGTH_LONG).show()
+
+            override fun onResponse(call: Call<datausers>, response: Response<datausers>) {
+                if(response.code()== 200) {
+                    Toast.makeText(this@MainActivity, "Exito", Toast.LENGTH_LONG).show()
+                    val datausers = response.body()!!
+
+                    val stringBuilder = "email:" + datausers.email
+
+                    Log.e("successfull","information "+stringBuilder)
+                    if(datausers.email.equals(ed_email.text.toString().trim()) ){
+                        Toast.makeText(this@MainActivity, "Exito", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
 
         })
+
     }
 
     private fun getusers() {
